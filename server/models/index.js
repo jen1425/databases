@@ -3,16 +3,14 @@ var db = require('../db');
 module.exports = {
   messages: {
     get: function (callback) {
-      console.log('hello from get model!')
-      db.query('SELECT * FROM mesages', function(err, results, fields) {
+      db.query('SELECT * FROM messages', function(err, results, fields) {
         if (err) { console.error(err)};
-
+        // no messsages returned
         console.log('get all messages results: ', results);
-
         callback(results);
-      })
+      });
     },
-    
+
     post: function (data, callback) {
       data.roomname = data.roomname || 'Lobby';
       db.query('INSERT INTO users (`username`) SELECT "' + data.username + '" FROM DUAL WHERE NOT EXISTS (SELECT userID FROM users WHERE username = "' + data.username + '" LIMIT 1 );',
@@ -21,7 +19,7 @@ module.exports = {
           db.query ('INSERT INTO rooms (`room`) SELECT "' + data.roomname + '" FROM DUAL WHERE NOT EXISTS (SELECT roomID FROM rooms WHERE room = "' + data.roomname + '" LIMIT 1 );',
             function(err, results, fields) {
               if (err) {console.error(err)}
-              db.query('INSERT INTO messages (message, userID, roomID) VALUES ("' + 
+              db.query('INSERT INTO messages (message, userID, roomID) VALUES ("' +
                 data.message + '" ,' +
                 '(SELECT userID FROM users WHERE username = "' + data.username + '"),' +
                 '(SELECT roomID FROM rooms WHERE room = "'+ data.roomname +'") );', function(err, results, fields) {

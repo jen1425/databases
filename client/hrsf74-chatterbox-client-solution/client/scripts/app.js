@@ -3,7 +3,7 @@ var app = {
 
   //TODO: The current 'handleUsernameClick' function just toggles the class 'friend'
   //to all messages sent by the user
-  server: 'http://parse.CAMPUS.hackreactor.com/chatterbox/classes/messages',
+  server: 'http://localhost:3000',
   username: 'anonymous',
   roomname: 'lobby',
   lastMessageId: 0,
@@ -30,9 +30,9 @@ var app = {
     app.fetch(false);
 
     // Poll for new messages
-    setInterval(function() {
-      app.fetch(true);
-    }, 3000);
+    // setInterval(function() {
+    //   app.fetch(true);
+    // }, 3000);
   },
 
   send: function(message) {
@@ -40,7 +40,7 @@ var app = {
 
     // POST the message to the server
     $.ajax({
-      url: app.server,
+      url: app.server + 'classes/messages',
       type: 'POST',
       data: message,
       success: function (data) {
@@ -58,11 +58,15 @@ var app = {
 
   fetch: function(animate) {
     $.ajax({
-      url: app.server,
+      url: app.server + '/classes/messages',
       type: 'GET',
-      data: { order: '-createdAt' },
+      // data: { order: '-createdAt' },
       contentType: 'application/json',
       success: function(data) {
+        data = JSON.parse(data);
+        console.log('FINAL data ----> ');
+        console.dir(data);
+
         // Don't bother if we have nothing to work with
         if (!data.results || !data.results.length) { return; }
 
@@ -162,7 +166,7 @@ var app = {
     }
 
     var $message = $('<br><span/>');
-    $message.text(message.text).appendTo($chat);
+    $message.text(message.message).appendTo($chat);
 
     // Add the message to the UI
     app.$chats.append($chat);

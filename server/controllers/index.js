@@ -3,15 +3,12 @@ var models = require('../models');
 module.exports = {
   messages: {
     get: function (req, res) {
-   
-      console.log('Hello from controller GET!!')
-      var messages;
-      models.messages.get(function(newMessages) {
-        console.log('MESSAGES RETRIEVED UPON GET REQUEST: ', newMessages);
-        res.send(newMessages);
+        models.messages.get(function(newMessages) {
+        newMessages = {results: newMessages};
+        console.log('MESSAGES RETRIEVED UPON GET REQUEST: ', JSON.stringify(newMessages));
+        res.send(JSON.stringify(newMessages));
       });
 
-      // send back via express;
     }, // a function which handles a get request for all messages
     post: function (req, res) {
       models.messages.post(req.body, function() {
