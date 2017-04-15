@@ -8,7 +8,7 @@ CREATE TABLE users (
   PRIMARY KEY (userID)    
 );
 
-CREATE TABLE room (
+CREATE TABLE rooms (
   roomID int NOT NULL AUTO_INCREMENT,
   room varchar(20),
   PRIMARY KEY (roomID)    
@@ -25,7 +25,7 @@ CREATE TABLE messages (
     REFERENCES users(userID),
 
   FOREIGN KEY (roomID)
-    REFERENCES room(roomID)
+    REFERENCES rooms(roomID)
 );
 
 
