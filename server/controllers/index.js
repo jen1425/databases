@@ -3,10 +3,9 @@ var models = require('../models');
 module.exports = {
   messages: {
     get: function (req, res) {
-        models.messages.get(function(newMessages) {
-        newMessages = {results: newMessages};
-        console.log('MESSAGES RETRIEVED UPON GET REQUEST: ', JSON.stringify(newMessages));
-        res.send(JSON.stringify(newMessages));
+        models.messages.get(function(messages) {
+        messages = {results: messages};
+        res.send(JSON.stringify(messages));
       });
 
     }, // a function which handles a get request for all messages

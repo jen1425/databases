@@ -30,19 +30,22 @@ var app = {
     app.fetch(false);
 
     // Poll for new messages
-    // setInterval(function() {
-    //   app.fetch(true);
-    // }, 3000);
+    setInterval(function() {
+      app.fetch(true);
+    }, 3000);
   },
 
   send: function(message) {
     app.startSpinner();
+    messageJSON = JSON.stringify(message);
+    console.log(messageJSON);
 
     // POST the message to the server
     $.ajax({
-      url: app.server + 'classes/messages',
+      url: app.server + '/classes/messages',
       type: 'POST',
-      data: message,
+      data: messageJSON,
+      contentType: 'application/json',
       success: function (data) {
         // Clear messages input
         app.$message.val('');
@@ -77,7 +80,7 @@ var app = {
         var mostRecentMessage = data.results[data.results.length - 1];
 
         // Only bother updating the DOM if we have a new message
-        if (mostRecentMessage.objectId !== app.lastMessageId) {
+        // if (mostRecentMessage.messageId !== app.lastMessageId) {
           // Update the UI with the fetched rooms
           app.renderRoomList(data.results);
 
@@ -85,8 +88,8 @@ var app = {
           app.renderMessages(data.results, animate);
 
           // Store the ID of the most recent message
-          app.lastMessageId = mostRecentMessage.objectId;
-        }
+          app.lastMessageId = mostRecentMessage.messageId;
+        // }
       },
       error: function(error) {
         console.error('chatterbox: Failed to fetch messages', error);
@@ -218,7 +221,7 @@ var app = {
   handleSubmit: function(event) {
     var message = {
       username: app.username,
-      text: app.$message.val(),
+      message: app.$message.val(),
       roomname: app.roomname || 'lobby'
     };
 
